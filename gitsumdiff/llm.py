@@ -3,7 +3,7 @@
 import fileinput
 import logging
 import os
-import subprocess
+import subprocess   # nosec B404
 from typing import Optional
 
 from langchain.callbacks.manager import CallbackManager
@@ -13,7 +13,7 @@ from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
 from langchain_community.llms import LlamaCpp
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 
 _GENERATION_TEMPLATE = '''\
 Instruction:
@@ -24,7 +24,7 @@ Instruction:
 Output format:
 - Present commit messages in a bullet-point list of Markdown.
 
-Input Git Diff result:
+Input `git diff` result:
 ```
 {input_text}
 ```
@@ -64,7 +64,7 @@ def generate_commit_message_from_diff(
                 model=google_model_name
             )   # type: ignore
         else:
-            llm = OpenAI(model_name=openai_model_name)
+            llm = ChatOpenAI(model_name=openai_model_name)  # type: ignore
     llm_chain = _create_llm_chain(llm=llm, n_output_mssage=n_output_messages)
     input_text = _read_git_diff_txt(path=git_diff_txt_path, git=git)
     logger.info('Genaerating commit messages from the input text.')
@@ -100,7 +100,7 @@ def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
         git_diff = subprocess.run(
             [git, 'diff', '--cached'], stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, text=True
-        )
+        )   # nosec B603
         if git_diff.returncode == 0:
             git_diff_txt = git_diff.stdout
         else:

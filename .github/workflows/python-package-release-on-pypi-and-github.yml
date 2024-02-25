@@ -1,0 +1,11 @@
+---
+name: Release on PyPI and GitHub
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-release-on-pypi-and-github.yml@main
+    with:
+      python-version: 3.x
+    secrets:
+      PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
