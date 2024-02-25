@@ -3,7 +3,7 @@
 import fileinput
 import logging
 import os
-import subprocess   # nosec B404
+import subprocess  # nosec B404
 from typing import Optional
 
 from langchain.callbacks.manager import CallbackManager
@@ -32,7 +32,7 @@ Input `git diff` result:
 
 
 def generate_commit_message_from_diff(
-    git_diff_txt_path: str, n_output_messages: int = 5,
+    git_diff_txt_path: str, n_output_messages: str = '5',
     llama_model_file_path: Optional[str] = None,
     google_model_name: Optional[str] = 'gemini-pro',
     google_api_key: Optional[str] = None,
@@ -76,7 +76,7 @@ def generate_commit_message_from_diff(
         print(output_string)
 
 
-def _create_llm_chain(llm: LlamaCpp, n_output_mssage: int = 5) -> LLMChain:
+def _create_llm_chain(llm: LlamaCpp, n_output_mssage: str = '5') -> LLMChain:
     logger = logging.getLogger(__name__)
     prompt = PromptTemplate(
         template=_GENERATION_TEMPLATE, input_variables=['input_text'],
@@ -96,20 +96,19 @@ def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
         logger.info(f'Read a text file: {path}')
         git_diff_txt = ''.join(fileinput.input(files=path))
     else:
-        logger.info('Read a result of `git diff HEAD`.')
+        cmd = f'{git} diff HEAD'
+        logger.info(f'Read a result of `{cmd}`.')
         git_diff = subprocess.run(
-            [git, 'diff', 'HEAD'], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, text=True
+            cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True
         )   # nosec B603
         if git_diff.returncode == 0:
             git_diff_txt = git_diff.stdout
         else:
-            raise RuntimeError(
-                f'Failed to execute "git diff --cached": {git_diff.stderr}'
-            )
+            raise RuntimeError(f'Failed to execute `{cmd}`: {git_diff.stderr}')
     logger.debug(f'git_diff_txt: {git_diff_txt}')
     if not git_diff_txt:
-        raise ValueError('`git diff` result is empty.')
+        raise ValueError('Git diff result is empty.')
     else:
         return git_diff_txt
 

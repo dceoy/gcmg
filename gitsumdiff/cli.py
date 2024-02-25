@@ -68,7 +68,7 @@ def main():
     else:
         generate_commit_message_from_diff(
             git_diff_txt_path=args['<git_diff_txt>'],
-            n_output_messages=int(args['--n-output-messages']),
+            n_output_messages=args['--n-output-messages'],
             llama_model_file_path=args['--llama-model-gguf'],
             google_model_name=args['--google-model'],
             google_api_key=args['--google-api-key'],
