@@ -96,9 +96,9 @@ def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
         logger.info(f'Read a text file: {path}')
         git_diff_txt = ''.join(fileinput.input(files=path))
     else:
-        logger.info('Read from `git diff --cached`.')
+        logger.info('Read a result of `git diff HEAD`.')
         git_diff = subprocess.run(
-            [git, 'diff', '--cached'], stdout=subprocess.PIPE,
+            [git, 'diff', 'HEAD'], stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, text=True
         )   # nosec B603
         if git_diff.returncode == 0:
@@ -109,7 +109,7 @@ def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
             )
     logger.debug(f'git_diff_txt: {git_diff_txt}')
     if not git_diff_txt:
-        raise ValueError('The input text is empty.')
+        raise ValueError('`git diff` result is empty.')
     else:
         return git_diff_txt
 
