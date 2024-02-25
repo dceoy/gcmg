@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "git-sum-diff"
+description = "Command-line tool to generate git commit messages from git diff output"
+authors = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
+maintainers = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
+license = {file = "LICENSE"}
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">= 3.10"
+dependencies = [
+  "docopt >= 0.6.2"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development"
+]
+
+[project.urls]
+Repository = "https://github.com/dceoy/git-sum-diff.git"
+
+[project.scripts]
+git-sum-diff = "gitsumdiff.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "gitsumdiff.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["./"]

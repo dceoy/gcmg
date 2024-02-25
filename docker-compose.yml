@@ -1,0 +1,14 @@
+---
+version: '3'
+services:
+  git-sum-diff:
+    container_name: git-sum-diff
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dceoy/git-sum-diff:latest
+    volumes:
+      - ${PWD}:/wd
+    working_dir: /wd
+    entrypoint:
+      - git-sum-diff
