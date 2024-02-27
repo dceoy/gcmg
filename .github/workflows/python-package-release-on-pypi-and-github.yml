@@ -3,7 +3,14 @@ name: Release on PyPI and GitHub
 on:
   workflow_dispatch:
 jobs:
+  lint-and-scan:
+    uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-lint-and-scan.yml@main
+    with:
+      package-path: .
+      python-version: 3.x
   release:
+    needs:
+      - lint-and-scan
     uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-release-on-pypi-and-github.yml@main
     with:
       python-version: 3.x

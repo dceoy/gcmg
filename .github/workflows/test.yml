@@ -27,5 +27,5 @@ jobs:
           pip install -U --no-cache-dir .
       - name: Test commands
         run: |
-          git-sum-diff --help
-          git-sum-diff --version
+          gcmg --help
+          gcmg --version

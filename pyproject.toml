@@ -3,7 +3,7 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "git-sum-diff"
+name = "gcmg"
 description = "Command-line tool to generate git commit messages from git diff output"
 authors = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
 maintainers = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
@@ -30,16 +30,16 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/dceoy/git-sum-diff.git"
+Repository = "https://github.com/dceoy/gcmg.git"
 
 [project.scripts]
-git-sum-diff = "gitsumdiff.cli:main"
+gcmg = "gcmg.cli:main"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.dynamic]
-version = {attr = "gitsumdiff.__version__"}
+version = {attr = "gcmg.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["./"]

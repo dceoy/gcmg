@@ -1,14 +1,14 @@
 ---
 version: '3'
 services:
-  git-sum-diff:
-    container_name: git-sum-diff
+  gcmg:
+    container_name: gcmg
     build:
       context: .
       dockerfile: Dockerfile
-    image: dceoy/git-sum-diff:latest
+    image: dceoy/gcmg:latest
     volumes:
       - ${PWD}:/wd
     working_dir: /wd
     entrypoint:
-      - git-sum-diff
+      - gcmg

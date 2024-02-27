@@ -3,13 +3,13 @@
 Command-line tool to generate git commit messages from git diff output
 
 Usage:
-    git-sum-diff [--debug|--info] [--temperature=<float>] [--top-p=<float>]
+    gcmg [--debug|--info] [--temperature=<float>] [--top-p=<float>]
         [--max-tokens=<int>] [--n-ctx=<int>] [--seed=<int>]
         [--openai-model=<name>|--google-model=<name>|--llama-model-gguf=<path>]
         [--openai-api-key=<str>] [--openai-organization=<str>]
         [--google-api-key=<str>] [--n-output-messages=<int>] [<git_diff_txt>]
-    git-sum-diff -h|--help
-    git-sum-diff --version
+    gcmg -h|--help
+    gcmg --version
 
 Options:
     --debug, --info         Execute a command with debug|info messages

@@ -3,7 +3,7 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD https://bootstrap.pypa.io/get-pip.py /tmp/get-pip.py
-ADD . /tmp/git-sum-diff
+ADD . /tmp/gcmg
 
 RUN set -e \
       && apt-get -y update \
@@ -16,7 +16,7 @@ RUN set -e \
 
 RUN set -e \
       && /usr/bin/python3 /tmp/get-pip.py \
-      && pip install -U --no-cache-dir pip /tmp/git-sum-diff \
-      && rm -rf /tmp/get-pip.py /tmp/git-sum-diff
+      && pip install -U --no-cache-dir pip /tmp/gcmg \
+      && rm -rf /tmp/get-pip.py /tmp/gcmg
 
-ENTRYPOINT ["/usr/local/bin/git-sum-diff"]
+ENTRYPOINT ["/usr/local/bin/gcmg"]
