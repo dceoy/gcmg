@@ -50,30 +50,29 @@ def generate_commit_message_from_diff(
             max_tokens=max_tokens, n_ctx=n_ctx, seed=seed,
             token_wise_streaming=token_wise_streaming
         )
+    elif google_model_name:
+        _override_env_vars(GOOGLE_API_KEY=google_api_key)
+        logger.info(f'Use the Google model: {google_model_name}')
+        llm = ChatGoogleGenerativeAI(model=google_model_name)   # type: ignore
     else:
-        overrided_env_vars = {
-            'GOOGLE_API_KEY': google_api_key, 'OPENAI_API_KEY': openai_api_key,
-            'OPENAI_ORGANIZATION': openai_organization
-        }
-        for k, v in overrided_env_vars.items():
-            if v:
-                logger.info(f'Override environment variable: {k}')
-                os.environ[k] = v
-        if google_model_name:
-            llm = ChatGoogleGenerativeAI(
-                model=google_model_name
-            )   # type: ignore
-        else:
-            llm = ChatOpenAI(model_name=openai_model_name)  # type: ignore
+        _override_env_vars(
+            OPENAI_API_KEY=openai_api_key,
+            OPENAI_ORGANIZATION=openai_organization
+        )
+        logger.info(f'Use the OpenAI model: {openai_model_name}')
+        llm = ChatOpenAI(model_name=openai_model_name)  # type: ignore
     llm_chain = _create_llm_chain(llm=llm, n_output_mssage=n_output_messages)
     input_text = _read_git_diff_txt(path=git_diff_txt_path, git=git)
-    logger.info('Genaerating commit messages from the input text.')
-    output_string = llm_chain.invoke({'input_text': input_text})
-    logger.info(f'LLM output: {output_string}')
-    if not output_string:
-        raise RuntimeError('LLM output is empty.')
+    if not input_text:
+        logger.warning('Git diff result is empty.')
     else:
-        print(output_string)
+        logger.info('Genaerating commit messages from the input text.')
+        output_string = llm_chain.invoke({'input_text': input_text})
+        logger.debug(f'LLM output: {output_string}')
+        if not output_string:
+            raise RuntimeError('LLM output is empty.')
+        else:
+            print(output_string)
 
 
 def _create_llm_chain(llm: LlamaCpp, n_output_mssage: str = '5') -> LLMChain:
@@ -83,7 +82,7 @@ def _create_llm_chain(llm: LlamaCpp, n_output_mssage: str = '5') -> LLMChain:
         partial_variables={'n_output_mssage': n_output_mssage}
     )
     chain = prompt | llm | StrOutputParser()
-    logger.info(f'LLM chain: {chain}')
+    logger.debug(f'LLM chain: {chain}')
     return chain
 
 
@@ -107,10 +106,15 @@ def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
         else:
             raise RuntimeError(f'Failed to execute `{cmd}`: {git_diff.stderr}')
     logger.debug(f'git_diff_txt: {git_diff_txt}')
-    if not git_diff_txt:
-        raise ValueError('Git diff result is empty.')
-    else:
-        return git_diff_txt
+    return git_diff_txt
+
+
+def _override_env_vars(**kwargs: Optional[str]) -> None:
+    logger = logging.getLogger(__name__)
+    for k, v in kwargs.items():
+        if v:
+            logger.info(f'Override environment variable: {k}')
+            os.environ[k] = v
 
 
 def _read_llm_file(
@@ -119,7 +123,7 @@ def _read_llm_file(
     token_wise_streaming: bool = False
 ) -> LlamaCpp:
     logger = logging.getLogger(__name__)
-    logger.info(f'Read a Llama 2 model file: {path}')
+    logger.info(f'Read a Llama model file: {path}')
     llm = LlamaCpp(
         model_path=path, temperature=temperature, top_p=top_p,
         max_tokens=max_tokens, n_ctx=n_ctx, seed=seed,
