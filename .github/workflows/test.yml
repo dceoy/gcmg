@@ -7,21 +7,46 @@ on:
   pull_request:
     branches:
       - main
+  workflow_call:
+    inputs:
+      python-version:
+        required: false
+        type: string
+        description: Python version to use
+        default: 3.x
+    secrets:
+      GOOGLE_API_KEY:
+        required: true
+        description: Google API key
   workflow_dispatch:
+    inputs:
+      python-version:
+        required: false
+        type: string
+        description: Python version to use
+        default: 3.x
+    secrets:
+      GOOGLE_API_KEY:
+        required: true
+        description: Google API key
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+    working-directory: .
 jobs:
   lint-and-scan:
     uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-lint-and-scan.yml@main
     with:
       package-path: .
-      python-version: 3.x
-  test:
+      python-version: ${{ inputs.python-version || '3.x' }}
+  test-cli:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.x
+          python-version: ${{ inputs.python-version || '3.x' }}
       - name: Install packages
         run: |
           pip install -U --no-cache-dir .
