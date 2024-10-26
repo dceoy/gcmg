@@ -64,7 +64,7 @@ RUN \
       apt-get -y update \
       && apt-get -y upgrade \
       && apt-get -y install --no-install-recommends --no-install-suggests \
-        ca-certificates
+        ca-certificates git
 
 RUN \
       groupadd --gid "${USER_GID}" "${USER_NAME}" \

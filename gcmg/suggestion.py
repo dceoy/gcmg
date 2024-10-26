@@ -8,7 +8,11 @@ import subprocess  # noqa: S404
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
+from langchain_aws import ChatBedrockConverse
 from langchain_community.llms import LlamaCpp
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from rich import print
 
 from .llm import create_llm_instance
@@ -16,7 +20,7 @@ from .llm import create_llm_instance
 _GENERATION_TEMPLATE = """\
 Instruction:
 - Analyze the provided `git diff` output.
-- Generate {n_output_mssage} succinct, informative Git commit messages summarizing the changes.
+- Generate {n_output_messages} succinct, informative Git commit messages summarizing the changes.
 - Capture the essence and impact of the changes across files.
 
 Output format:
@@ -86,11 +90,7 @@ def generate_commit_message_from_diff(
         aws_region: AWS region.
         bedrock_endpoint_base_url: Base URL of the Amazon Bedrock endpoint.
         git: Path to the git executable.
-
-    Raises:
-        RuntimeError: If the LLM output is empty.
     """
-    logger = logging.getLogger(__name__)
     llm = create_llm_instance(
         llamacpp_model_file_path=llamacpp_model_file_path,
         groq_model_name=groq_model_name,
@@ -116,27 +116,41 @@ def generate_commit_message_from_diff(
         aws_region=aws_region,
         bedrock_endpoint_base_url=bedrock_endpoint_base_url,
     )
-    llm_chain = _create_llm_chain(llm=llm, n_output_mssage=n_output_messages)
-    input_text = _read_git_diff_txt(path=git_diff_txt_path, git=git)
-    logger.info("Genaerating commit messages from the input text.")
-    output_string = llm_chain.invoke({"input_text": input_text})
-    logger.debug("LLM output: %s", output_string)
-    if not output_string:
-        raise RuntimeError("LLM output is empty.")
-    else:
-        print(output_string)
-
-
-def _create_llm_chain(llm: LlamaCpp, n_output_mssage: int = 5) -> LLMChain:
-    logger = logging.getLogger(__name__)
-    prompt = PromptTemplate(
-        template=_GENERATION_TEMPLATE,
-        input_variables=["input_text"],
-        partial_variables={"n_output_mssage": str(n_output_mssage)},
+    git_diff_text = _read_git_diff_txt(path=git_diff_txt_path, git=git)
+    _generate_and_print_commit_messages(
+        git_diff_text=git_diff_text,
+        llm=llm,
+        n_output_messages=n_output_messages,
     )
-    chain = prompt | llm | StrOutputParser()
-    logger.debug("LLM chain: %s", chain)
-    return chain
+
+
+def _generate_and_print_commit_messages(
+    git_diff_text: str | None,
+    llm: LlamaCpp
+    | ChatGroq
+    | ChatBedrockConverse
+    | ChatGoogleGenerativeAI
+    | ChatOpenAI,
+    n_output_messages: int = 5,
+) -> None:
+    logger = logging.getLogger(__name__)
+    if not git_diff_text:
+        logger.warning("Git diff result is empty.")
+    else:
+        logger.info("Genaerating commit messages from the input text.")
+        prompt = PromptTemplate(
+            template=_GENERATION_TEMPLATE,
+            input_variables=["input_text"],
+            partial_variables={"n_output_messages": str(n_output_messages)},
+        )
+        llm_chain: LLMChain = prompt | llm | StrOutputParser()
+        logger.debug("LLM chain: %s", llm_chain)
+        llm_output = llm_chain.invoke({"input_text": git_diff_text})
+        logger.debug("LLM output: %s", llm_output)
+        if llm_output:
+            print(llm_output)
+        else:
+            raise RuntimeError("LLM output is empty.")
 
 
 def _read_git_diff_txt(path: str | None = None, git: str = "git") -> str | None:
@@ -151,7 +165,4 @@ def _read_git_diff_txt(path: str | None = None, git: str = "git") -> str | None:
             cmd, capture_output=True, check=True
         ).stdout.decode()
     logger.debug("git_diff_txt: %s", git_diff_txt)
-    if not git_diff_txt:
-        logger.warning("Git diff result is empty.")
-    else:
-        return git_diff_txt
+    return git_diff_txt

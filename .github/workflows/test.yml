@@ -8,6 +8,20 @@ on:
         type: string
         description: Python version to use
         default: 3.x
+      node-version:
+        required: false
+        type: string
+        description: Node.js version to use
+        default: latest
+      bats-version:
+        required: false
+        type: string
+        description: Bats version to use
+        default: latest
+    secrets:
+      GROQ_API_KEY:
+        required: true
+        description: Groq API key
   workflow_dispatch:
     inputs:
       python-version:
@@ -15,12 +29,30 @@ on:
         type: string
         description: Python version to use
         default: 3.x
+      node-version:
+        required: false
+        type: string
+        description: Node.js version to use
+        default: latest
+      bats-version:
+        required: false
+        type: string
+        description: Bats version to use
+        default: latest
+      groq-model:
+        required: false
+        type: choice
+        options:
+          - null
+          - llama-3.1-70b-versatile
+        description: Groq model to use
+        default: null
 defaults:
   run:
     shell: bash -euo pipefail {0}
     working-directory: .
 jobs:
-  cli-tests:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,5 +66,36 @@ jobs:
           poetry install --no-interaction
       - name: Run unit tests using pytest
         run: |
-          poetry run gcmg --version
-          poetry run gcmg --help
+          poetry run pytest .
+  e2e-tests:
+    runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version || 'latest' }}
+      - name: Install Bats
+        env:
+          BATS_VERSION: ${{ inputs.bats-version || 'latest' }}
+        run: |
+          npm install -g "bats@${BATS_VERSION}"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version || '3.x' }}
+      - name: Install packages
+        run: |
+          pip install -U --no-cache-dir pip poetry
+          poetry install --no-interaction
+      - name: Test CLI
+        run: |
+          bats --verbose-run ./test/bats/test_cli.bats
+      - name: Test a command using Groq
+        if: inputs.groq-model != null
+        env:
+          GROQ_MODEL: ${{ inputs.groq-model }}
+        run: |
+          bats --verbose-run ./test/bats/test_groq.bats
