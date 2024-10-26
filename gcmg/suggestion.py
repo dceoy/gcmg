@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Functions to generate commit messages."""
 
 import fileinput
 import logging

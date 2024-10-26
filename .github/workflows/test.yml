@@ -1,12 +1,6 @@
 ---
 name: Test
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_call:
     inputs:
       python-version:
@@ -14,10 +8,6 @@ on:
         type: string
         description: Python version to use
         default: 3.x
-    secrets:
-      GOOGLE_API_KEY:
-        required: true
-        description: Google API key
   workflow_dispatch:
     inputs:
       python-version:
@@ -30,12 +20,7 @@ defaults:
     shell: bash -euo pipefail {0}
     working-directory: .
 jobs:
-  lint-and-scan:
-    uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-lint-and-scan.yml@main
-    with:
-      package-path: .
-      python-version: ${{ inputs.python-version || '3.x' }}
-  test-cli:
+  cli-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,8 +30,9 @@ jobs:
           python-version: ${{ inputs.python-version || '3.x' }}
       - name: Install packages
         run: |
-          pip install -U --no-cache-dir .
-      - name: Test commands
+          pip install -U --no-cache-dir pip poetry
+          poetry install --no-interaction
+      - name: Run unit tests using pytest
         run: |
-          gcmg --help
-          gcmg --version
+          poetry run gcmg --version
+          poetry run gcmg --help

@@ -27,7 +27,8 @@ def main(
     n_output_messages: Annotated[
         int,
         typer.Option(
-           "--n-output-messages", help="Specify the number of output messages.",
+            "--n-output-messages",
+            help="Specify the number of output messages.",
         ),
     ] = 5,
     temperature: Annotated[
@@ -35,20 +36,25 @@ def main(
         typer.Option("--temperature", help="Specify the temperature for sampling."),
     ] = 0,
     top_p: Annotated[
-        float, typer.Option("--top-p", help="Specify the top-p value for sampling."),
+        float,
+        typer.Option("--top-p", help="Specify the top-p value for sampling."),
     ] = 0.1,
     max_tokens: Annotated[
-        int, typer.Option("--max-tokens", help="Specify the max tokens to generate."),
+        int,
+        typer.Option("--max-tokens", help="Specify the max tokens to generate."),
     ] = 8000,
     n_ctx: Annotated[
-        int, typer.Option("--n-ctx", help="Specify the token context window."),
+        int,
+        typer.Option("--n-ctx", help="Specify the token context window."),
     ] = 1024,
     seed: Annotated[int, typer.Option("--seed", help="Specify the random seed.")] = -1,
     n_batch: Annotated[
-        int, typer.Option("--n-batch", help="Specify the number of batch tokens."),
+        int,
+        typer.Option("--n-batch", help="Specify the number of batch tokens."),
     ] = 8,
     n_gpu_layers: Annotated[
-        int, typer.Option("--n-gpu-layers", help="Specify the number of GPU layers."),
+        int,
+        typer.Option("--n-gpu-layers", help="Specify the number of GPU layers."),
     ] = -1,
     openai_model_name: Annotated[
         str | None,
@@ -130,12 +136,14 @@ def main(
         ),
     ] = None,
     debug: Annotated[
-        bool, typer.Option("--debug", help="Execute with debug messages."),
+        bool,
+        typer.Option("--debug", help="Execute with debug messages."),
     ] = False,
     info: Annotated[
-        bool, typer.Option("--info", help="Execute with info messages."),
+        bool,
+        typer.Option("--info", help="Execute with info messages."),
     ] = False,
-    version: Annotated[     # noqa: ARG001
+    version: Annotated[  # noqa: ARG001
         bool,
         typer.Option(
             "--version",
