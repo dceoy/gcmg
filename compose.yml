@@ -1,5 +1,4 @@
 ---
-version: '3'
 services:
   gcmg:
     container_name: gcmg
