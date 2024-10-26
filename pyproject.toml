@@ -1,45 +1,185 @@
-[build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "gcmg"
+version = "v0.0.2"
 description = "Command-line tool to generate git commit messages from git diff output"
-authors = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
-maintainers = [{name = "dceoy", email = "dnarsil+github@gmail.com"}]
-license = {file = "LICENSE"}
+license = "AGPL-3.0-or-later"
+authors = ["Daichi Narushima <dceoy@users.noreply.github.com>"]
+maintainers = ["Daichi Narushima <dceoy@users.noreply.github.com>"]
 readme = "README.md"
-dynamic = ["version"]
-requires-python = ">= 3.10"
-dependencies = [
-  "docopt >= 0.6.2",
-  "langchain >= 0.1.9",
-  "langchain-community >= 0.0.22",
-  "langchain-google-genai >= 0.0.9",
-  "langchain-openai >= 0.0.7",
-  "llama-cpp-python >= 0.2.50",
-  "openai >= 1.12.0"
-]
+homepage = "https://github.com/dceoy/gcmg"
+repository = "https://github.com/dceoy/gcmg.git"
+documentation = "https://github.com/dceoy/gcmg/blob/main/README.md"
+keywords = ["llm"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Environment :: Console",
-  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
   "Operating System :: OS Independent",
+  "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Topic :: Software Development"
 ]
+packages = [
+  {include = "gcmg", from = "."}
+]
+include = []
+exclude = []
 
-[project.urls]
-Repository = "https://github.com/dceoy/gcmg.git"
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = "^0.3.0"
+langchain-community = "^0.3.0"
+langchain-google-genai = "^2.0.0"
+langchain-openai = "^0.2.0"
+langchain-groq = "^0.2.0"
+langchain-aws = "^0.2.0"
+llama-cpp-python = ">=0.2.90,<0.4.0"
+boto3-stubs = {extras = ["sts"], version = "^1.35.24"}
+typer = "^0.12.5"
 
-[project.scripts]
-gcmg = "gcmg.cli:main"
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.6.4,<0.8.0"
+pyright = "^1.1.379"
+pytest = "^8.3.2"
+pytest-mock = "^3.14.0"
+pytest-cov = "^5.0.0"
+pytest-xdist = "^3.6.1"
 
-[tool.setuptools]
-include-package-data = true
+[tool.poetry.scripts]
+gcmg = "gcmg.cli:app"
 
-[tool.setuptools.dynamic]
-version = {attr = "gcmg.__version__"}
+[tool.ruff]
+line-length = 88
+exclude = ["build"]
+preview = true
 
-[tool.setuptools.packages.find]
-where = ["./"]
+[tool.ruff.lint]
+select = [
+  "F",      # Pyflakes (F)
+  "E",      # pycodestyle error (E)
+  "W",      # pycodestyle warning (W)
+  "C90",    # mccabe (C90)
+  "I",      # isort (I)
+  "N",      # pep8-naming (N)
+  "D",      # pydocstyle (D)
+  "UP",     # pyupgrade (UP)
+  "S",      # flake8-bandit (S)
+  "B",      # flake8-bugbear (B)
+  "C4",     # flake8-comprehensions (C4)
+  "SIM",    # flake8-simplify (SIM)
+  "ARG",    # flake8-unused-arguments (ARG)
+  "PD",     # pandas-vet (PD)
+  "PLC",    # Pylint convention (PLC)
+  "PLE",    # Pylint error (PLE)
+  "PLR",    # Pylint refactor (PLR)
+  "PLW",    # Pylint warning (PLW)
+  "FLY",    # flynt (FLY)
+  "NPY",    # NumPy-specific rules (NPY)
+  "PERF",   # Perflint (PERF)
+  "FURB",   # refurb (FURB)
+  "RUF",    # Ruff-specific rules (RUF)
+  "YTT",    # flake8-2020 (YTT)
+  # "ANN",    # flake8-annotations (ANN)
+  "ASYNC",  # flake8-async (ASYNC)
+  "BLE",    # flake8-blind-except (BLE)
+  # "FBT",    # flake8-boolean-trap (FBT)
+  "A",      # flake8-builtins (A)
+  "COM",    # flake8-commas (COM)
+  # "CPY",    # flake8-copyright (CPY)
+  "DTZ",    # flake8-datetimez (DTZ)
+  "T10",    # flake8-debugger (T10)
+  "DJ",     # flake8-django (DJ)
+  # "EM",     # flake8-errmsg (EM)
+  # "EXE",    # flake8-executable (EXE)
+  # "FA",     # flake8-future-annotations (FA)
+  "ISC",    # flake8-implicit-str-concat (ISC)
+  "ICN",    # flake8-import-conventions (ICN)
+  "LOG",    # flake8-logging (LOG)
+  "G",      # flake8-logging-format (G)
+  "INP",    # flake8-no-pep420 (INP)
+  "PIE",    # flake8-pie (PIE)
+  # "T20",    # flake8-print (T20)
+  "PYI",    # flake8-pyi (PYI)
+  "PT",     # flake8-pytest-style (PT)
+  "Q",      # flake8-quotes (Q)
+  "RSE",    # flake8-raise (RSE)
+  # "RET",    # flake8-return (RET)
+  "SLF",    # flake8-self (SLF)
+  "SLOT",   # flake8-slots (SLOT)
+  "TID",    # flake8-tidy-imports (TID)
+  # "TCH",    # flake8-type-checking (TCH)
+  "INT",    # flake8-gettext (INT)
+  "PTH",    # flake8-use-pathlib (PTH)
+  "TD",     # flake8-todos (TD)
+  "FIX",    # flake8-fixme (FIX)
+  "ERA",    # eradicate (ERA)
+  "PGH",    # pygrep-hooks (PGH)
+  "TRY",    # tryceratops (TRY)
+  "FAST",   # FastAPI (FAST)
+  "AIR",    # Airflow (AIR)
+  "DOC"     # pydoclint (DOC)
+]
+ignore = [
+  "B008",     # function-call-in-default-argument
+  "A002",     # builtin-argument-shadowing
+  "A004",     # builtin-import-shadowing
+  "COM812",   # missing-trailing-comma
+  "ISC001",   # single-line-implicit-string-concatenation
+  "PIE790",   # unnecessary-placeholder
+  "TRY003",   # raise-vanilla-args
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 30
+max-locals = 30
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+  "D104",     # undocumented-public-package
+]
+"test/**.py" = [
+  "D100",     # undocumented-public-module
+  "D101",     # undocumented-public-class
+  "D102",     # undocumented-public-method
+  "D103",     # undocumented-public-function
+  "S101",     # assert
+  "PLC2701",  # import-private-name
+  "SLF001",   # private-member-access
+]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+exclude = ["build"]
+threads = 0
+
+[tool.pytest.ini_options]
+addopts = [
+  "--cov=gcmg",
+  "--cov-report=xml",
+  "--cov-report=html",
+  "--cov-report=term-missing",
+  "--cov-branch",
+  "--junitxml=junit/test-results.xml",
+  "--doctest-modules",
+  "--capture=no",
+  "--numprocesses=auto"
+]
+testpaths = ["test/pytest"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+minversion = "6.0"
+
+[tool.coverage.run]
+source = ["gcmg"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -8,10 +8,6 @@ on:
         type: string
         description: Python version to use
         default: 3.x
-    secrets:
-      PYPI_API_TOKEN:
-        required: true
-        description: PyPI API token
 jobs:
   test:
     uses: ./.github/workflows/test.yml

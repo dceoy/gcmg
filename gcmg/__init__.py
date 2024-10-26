@@ -1,4 +1,5 @@
 #!/usr/bin/env python
 
+from importlib.metadata import version
 
-__version__ = 'v0.0.1'
+__version__ = version(__package__) if __package__ else None

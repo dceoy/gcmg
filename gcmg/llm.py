@@ -1,139 +1,237 @@
 #!/usr/bin/env python
+"""Functions for LLM."""
 
-import fileinput
+import ctypes
 import logging
 import os
-import subprocess  # nosec B404
-from typing import Optional
+import sys
 
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
-from langchain.schema import StrOutputParser
+from langchain_aws import ChatBedrockConverse
 from langchain_community.llms import LlamaCpp
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from llama_cpp import llama_log_callback, llama_log_set
 
-_GENERATION_TEMPLATE = '''\
-Instruction:
-- Analyze the provided `git diff` output.
-- Generate {n_output_mssage} succinct, informative Git commit messages summarizing the changes.
-- Capture the essence and impact of the changes across files.
+from .utility import has_aws_credentials, override_env_vars
 
-Output format:
-- Present commit messages in a bullet-point list of Markdown.
-
-Input `git diff` result:
-```
-{input_text}
-```
-'''     # noqa: E501
-
-
-def generate_commit_message_from_diff(
-    git_diff_txt_path: str, n_output_messages: str = '5',
-    llama_model_file_path: Optional[str] = None,
-    google_model_name: Optional[str] = 'gemini-pro',
-    google_api_key: Optional[str] = None,
-    openai_model_name: Optional[str] = 'gpt-3.5-turbo',
-    openai_api_key: Optional[str] = None,
-    openai_organization: Optional[str] = None, temperature: float = 0.8,
-    top_p: float = 0.95, max_tokens: int = 256, n_ctx: int = 512,
-    seed: int = -1, token_wise_streaming: bool = False, git: str = 'git'
-) -> None:
-    '''Extract JSON from input text.'''
-    logger = logging.getLogger(__name__)
-    if llama_model_file_path:
-        llm = _read_llm_file(
-            path=llama_model_file_path, temperature=temperature, top_p=top_p,
-            max_tokens=max_tokens, n_ctx=n_ctx, seed=seed,
-            token_wise_streaming=token_wise_streaming
-        )
-    elif google_model_name:
-        _override_env_vars(GOOGLE_API_KEY=google_api_key)
-        logger.info(f'Use the Google model: {google_model_name}')
-        llm = ChatGoogleGenerativeAI(model=google_model_name)   # type: ignore
-    else:
-        _override_env_vars(
-            OPENAI_API_KEY=openai_api_key,
-            OPENAI_ORGANIZATION=openai_organization
-        )
-        logger.info(f'Use the OpenAI model: {openai_model_name}')
-        llm = ChatOpenAI(model_name=openai_model_name)  # type: ignore
-    llm_chain = _create_llm_chain(llm=llm, n_output_mssage=n_output_messages)
-    input_text = _read_git_diff_txt(path=git_diff_txt_path, git=git)
-    if not input_text:
-        logger.warning('Git diff result is empty.')
-    else:
-        logger.info('Genaerating commit messages from the input text.')
-        output_string = llm_chain.invoke({'input_text': input_text})
-        logger.debug(f'LLM output: {output_string}')
-        if not output_string:
-            raise RuntimeError('LLM output is empty.')
-        else:
-            print(output_string)
+_DEFAULT_MODEL_NAMES = {
+    "openai": "gpt-4o-mini",
+    "google": "gemini-1.5-flash",
+    "groq": "llama-3.1-70b-versatile",
+    "bedrock": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+}
+_DEFAULT_MAX_TOKENS = {
+    "gpt-4o": 128000,
+    "gpt-4o-2024-05-13": 128000,
+    "gpt-4o-mini": 128000,
+    "gpt-4o-mini-2024-07-18": 128000,
+    "gpt-4o-2024-08-06": 128000,
+    "o1-mini": 128000,
+    "o1-mini-2024-09-12": 128000,
+    "o1-preview": 128000,
+    "o1-preview-2024-09-12": 128000,
+    "claude-3-5-sonnet@20240620": 100000,
+    "gemini-1.5-pro": 1048576,
+    "gemini-1.5-flash": 1048576,
+    "gemma2": 8200,
+    "gemma2-9b-it": 8192,
+    "claude-3-5-sonnet": 100000,
+    "claude-3-5-sonnet-20240620": 100000,
+    "anthropic.claude-3-5-sonnet-20240620-v1:0": 100000,
+    "mixtral-8x7b-32768": 32768,
+    "llama-3.1-8b-instant": 131072,
+    "llama-3.1-70b-versatile": 131072,
+    "llama-3.1-405b-reasoning": 131072,
+}
 
 
-def _create_llm_chain(llm: LlamaCpp, n_output_mssage: str = '5') -> LLMChain:
-    logger = logging.getLogger(__name__)
-    prompt = PromptTemplate(
-        template=_GENERATION_TEMPLATE, input_variables=['input_text'],
-        partial_variables={'n_output_mssage': n_output_mssage}
+def create_llm_instance(
+    llamacpp_model_file_path: str | None = None,
+    groq_model_name: str | None = None,
+    groq_api_key: str | None = None,
+    bedrock_model_id: str | None = None,
+    google_model_name: str | None = None,
+    google_api_key: str | None = None,
+    openai_model_name: str | None = None,
+    openai_api_key: str | None = None,
+    openai_api_base: str | None = None,
+    openai_organization: str | None = None,
+    temperature: float = 0.8,
+    top_p: float = 0.95,
+    max_tokens: int = 8192,
+    n_ctx: int = 512,
+    seed: int = -1,
+    n_batch: int = 8,
+    n_gpu_layers: int = -1,
+    token_wise_streaming: bool = False,
+    timeout: int | None = None,
+    max_retries: int = 2,
+    aws_credentials_profile_name: str | None = None,
+    aws_region: str | None = None,
+    bedrock_endpoint_base_url: str | None = None,
+) -> LlamaCpp | ChatGroq | ChatBedrockConverse | ChatGoogleGenerativeAI | ChatOpenAI:
+    """Create an instance of LLM.
+
+    Args:
+        llamacpp_model_file_path: The file path of the LLM model.
+        groq_model_name: The name of the GROQ model.
+        groq_api_key: The API
+        bedrock_model_id: The ID of the Amazon Bedrock model.
+        google_model_name: The name of the Google Generative AI model.
+        google_api_key: The API key of the Google Generative AI.
+        openai_model_name: The name of the OpenAI model.
+        openai_api_key: The API key of the OpenAI.
+        openai_api_base: The base URL of the OpenAI API.
+        openai_organization: The organization of the OpenAI.
+        temperature: The temperature of the model.
+        top_p: The top-p of the model.
+        max_tokens: The maximum number of tokens.
+        n_ctx: The context size.
+        seed: The seed of the model.
+        n_batch: The batch size.
+        n_gpu_layers: The number of GPU layers.
+        token_wise_streaming: The flag to enable token-wise streaming.
+        timeout: The timeout of the model.
+        max_retries: The maximum number of retries.
+        aws_credentials_profile_name: The name of the AWS credentials profile.
+        aws_region: The AWS region.
+        bedrock_endpoint_base_url: The base URL of the Amazon Bedrock endpoint.
+
+    Returns:
+        An instance of LLM.
+
+    Raises:
+        RuntimeError: The model cannot be determined.
+    """
+    logger = logging.getLogger(create_llm_instance.__name__)
+    override_env_vars(
+        GROQ_API_KEY=groq_api_key,
+        GOOGLE_API_KEY=google_api_key,
+        OPENAI_API_KEY=openai_api_key,
     )
-    chain = prompt | llm | StrOutputParser()
-    logger.debug(f'LLM chain: {chain}')
-    return chain
-
-
-def _read_git_diff_txt(path: Optional[str] = None, git: str = 'git') -> str:
-    logger = logging.getLogger(__name__)
-    if path == '-':
-        logger.info('Read stdin.')
-        git_diff_txt = ''.join(fileinput.input(files=path))
-    elif path:
-        logger.info(f'Read a text file: {path}')
-        git_diff_txt = ''.join(fileinput.input(files=path))
+    if llamacpp_model_file_path:
+        logger.info("Use local LLM: %s", llamacpp_model_file_path)
+        return _read_llm_file(
+            path=llamacpp_model_file_path,
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens,
+            n_ctx=n_ctx,
+            seed=seed,
+            n_batch=n_batch,
+            n_gpu_layers=n_gpu_layers,
+            token_wise_streaming=token_wise_streaming,
+        )
+    elif groq_model_name or (
+        (not any([bedrock_model_id, google_model_name, openai_model_name]))
+        and os.environ.get("GROQ_API_KEY")
+    ):
+        logger.info("Use GROQ: %s", groq_model_name)
+        m = groq_model_name or _DEFAULT_MODEL_NAMES["groq"]
+        return ChatGroq(
+            model=m,
+            temperature=temperature,
+            max_tokens=_limit_max_tokens(max_tokens=max_tokens, model_name=m),
+            timeout=timeout,
+            max_retries=max_retries,
+            stop_sequences=None,
+        )
+    elif bedrock_model_id or (
+        (not any([google_model_name, openai_model_name])) and has_aws_credentials()
+    ):
+        logger.info("Use Amazon Bedrock: %s", bedrock_model_id)
+        m = bedrock_model_id or _DEFAULT_MODEL_NAMES["bedrock"]
+        return ChatBedrockConverse(
+            model=m,
+            temperature=temperature,
+            max_tokens=_limit_max_tokens(max_tokens=max_tokens, model_name=m),
+            region_name=aws_region,
+            base_url=bedrock_endpoint_base_url,
+            credentials_profile_name=aws_credentials_profile_name,
+        )
+    elif google_model_name or (
+        (not openai_model_name) and os.environ.get("GOOGLE_API_KEY")
+    ):
+        logger.info("Use Google Generative AI: %s", google_model_name)
+        m = google_model_name or _DEFAULT_MODEL_NAMES["google"]
+        return ChatGoogleGenerativeAI(
+            model=m,
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=_limit_max_tokens(max_tokens=max_tokens, model_name=m),
+            timeout=timeout,
+            max_retries=max_retries,
+        )
+    elif openai_model_name or os.environ.get("OPENAI_API_KEY"):
+        logger.info("Use OpenAI: %s", openai_model_name)
+        logger.info("OpenAI API base: %s", openai_api_base)
+        logger.info("OpenAI organization: %s", openai_organization)
+        m = openai_model_name or _DEFAULT_MODEL_NAMES["openai"]
+        return ChatOpenAI(
+            model=m,
+            base_url=openai_api_base,
+            organization=openai_organization,
+            temperature=temperature,
+            top_p=top_p,
+            seed=seed,
+            max_tokens=_limit_max_tokens(max_tokens=max_tokens, model_name=m),
+            timeout=timeout,
+            max_retries=max_retries,
+        )
     else:
-        cmd = f'{git} diff HEAD'
-        logger.info(f'Read a result of `{cmd}`.')
-        git_diff = subprocess.run(
-            cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            text=True
-        )   # nosec B603
-        if git_diff.returncode == 0:
-            git_diff_txt = git_diff.stdout
-        else:
-            raise RuntimeError(f'Failed to execute `{cmd}`: {git_diff.stderr}')
-    logger.debug(f'git_diff_txt: {git_diff_txt}')
-    return git_diff_txt
+        raise RuntimeError("The model cannot be determined.")
 
 
-def _override_env_vars(**kwargs: Optional[str]) -> None:
-    logger = logging.getLogger(__name__)
-    for k, v in kwargs.items():
-        if v:
-            logger.info(f'Override environment variable: {k}')
-            os.environ[k] = v
+def _limit_max_tokens(max_tokens: int, model_name: str) -> int:
+    default_max_tokens = _DEFAULT_MAX_TOKENS.get(model_name, max_tokens)
+    if max_tokens > default_max_tokens:
+        logging.getLogger(_limit_max_tokens.__name__).warning(
+            "The maximum number of tokens is limited to %d.",
+            default_max_tokens,
+        )
+        return default_max_tokens
+    else:
+        return max_tokens
 
 
 def _read_llm_file(
-    path: str, temperature: float = 0.8, top_p: float = 0.95,
-    max_tokens: int = 256, n_ctx: int = 512, seed: int = -1,
-    token_wise_streaming: bool = False
+    path: str,
+    temperature: float = 0.8,
+    top_p: float = 0.95,
+    max_tokens: int = 256,
+    n_ctx: int = 512,
+    seed: int = -1,
+    n_batch: int = 8,
+    n_gpu_layers: int = -1,
+    token_wise_streaming: bool = False,
 ) -> LlamaCpp:
-    logger = logging.getLogger(__name__)
-    logger.info(f'Read a Llama model file: {path}')
+    logger = logging.getLogger(_read_llm_file.__name__)
+    llama_log_set(_llama_log_callback, ctypes.c_void_p(0))
+    logger.info("Read the model file: %s", path)
     llm = LlamaCpp(
-        model_path=path, temperature=temperature, top_p=top_p,
-        max_tokens=max_tokens, n_ctx=n_ctx, seed=seed,
-        verbose=(
-            token_wise_streaming or logging.getLogger().level <= logging.DEBUG
-        ),
+        model_path=path,
+        temperature=temperature,
+        top_p=top_p,
+        max_tokens=max_tokens,
+        n_ctx=n_ctx,
+        seed=seed,
+        n_batch=n_batch,
+        n_gpu_layers=n_gpu_layers,
+        verbose=(token_wise_streaming or logger.level <= logging.DEBUG),
         callback_manager=(
             CallbackManager([StreamingStdOutCallbackHandler()])
-            if token_wise_streaming else None
-        )
+            if token_wise_streaming
+            else None
+        ),
     )
-    logger.debug(f'llm: {llm}')
+    logger.debug("llm: %s", llm)
     return llm
+
+
+@llama_log_callback
+def _llama_log_callback(level: int, text: bytes, user_data: ctypes.c_void_p) -> None:  # noqa: ARG001
+    if logging.root.level < logging.WARNING:
+        print(text.decode("utf-8"), end="", flush=True, file=sys.stderr)

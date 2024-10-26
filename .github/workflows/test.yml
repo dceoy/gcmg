@@ -25,10 +25,6 @@ on:
         type: string
         description: Python version to use
         default: 3.x
-    secrets:
-      GOOGLE_API_KEY:
-        required: true
-        description: Google API key
 defaults:
   run:
     shell: bash -euo pipefail {0}
