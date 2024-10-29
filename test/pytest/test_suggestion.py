@@ -185,7 +185,7 @@ def test__read_git_diff_txt(path: str | None, git: str, mocker: MockerFixture) -
     else:
         mock_fileinput_input.assert_not_called()
         mock_subprocess_run.assert_called_once_with(
-            [git, "diff", "HEAD"],
+            [git, "diff", "--staged"],
             capture_output=True,
             check=True,
         )

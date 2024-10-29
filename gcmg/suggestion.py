@@ -159,7 +159,7 @@ def _read_git_diff_txt(path: str | None = None, git: str = "git") -> str | None:
         logger.info("Read stdin or a file: %s", path)
         git_diff_txt = "".join(fileinput.input(files=path))  # noqa: SIM115
     else:
-        cmd = [git, "diff", "HEAD"]
+        cmd = [git, "diff", "--staged"]
         logger.info("Read a result of `%s`.", cmd)
         git_diff_txt = subprocess.run(  # noqa: S603
             cmd, capture_output=True, check=True
