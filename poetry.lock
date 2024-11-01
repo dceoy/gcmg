@@ -1440,6 +1440,17 @@ socks = ["socksio (==1.*)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "httpx-sse"
+version = "0.4.0"
+description = "Consume Server-Sent Event (SSE) messages with HTTPX."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "httpx-sse-0.4.0.tar.gz", hash = "sha256:1e81a3a3070ce322add1d3529ed42eb5f70817f45ed6ec915ab753f961139721"},
+    {file = "httpx_sse-0.4.0-py3-none-any.whl", hash = "sha256:f329af6eae57eaa2bdfd962b42524764af68075ea87370a2de920af5341e318f"},
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1647,20 +1658,21 @@ pydantic = ">=2,<3"
 
 [[package]]
 name = "langchain-community"
-version = "0.3.3"
+version = "0.3.4"
 description = "Community contributed LangChain integrations."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_community-0.3.3-py3-none-any.whl", hash = "sha256:319cfc2f923a066c91fbb8e02decd7814018af952b6b98298b8ac9d30ea1da56"},
-    {file = "langchain_community-0.3.3.tar.gz", hash = "sha256:bfb3f2b219aed21087e0ecb7d2ebd1c81401c02b92239e11645c822d5be63f80"},
+    {file = "langchain_community-0.3.4-py3-none-any.whl", hash = "sha256:67a44d3db8ba14a8abae67c8f611e6dc20002446439e761f673c7dffa506fb85"},
+    {file = "langchain_community-0.3.4.tar.gz", hash = "sha256:80c7e6491788449b8a6e7a31444ff8ebb5c32242f67a65aa33d56ad35a7b5b5c"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.8.3,<4.0.0"
 dataclasses-json = ">=0.5.7,<0.7"
-langchain = ">=0.3.4,<0.4.0"
-langchain-core = ">=0.3.12,<0.4.0"
+httpx-sse = ">=0.4.0,<0.5.0"
+langchain = ">=0.3.6,<0.4.0"
+langchain-core = ">=0.3.14,<0.4.0"
 langsmith = ">=0.1.125,<0.2.0"
 numpy = [
     {version = ">=1,<2", markers = "python_version < \"3.12\""},
@@ -3367,4 +3379,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a3ddd24a352a6e79d7836a65ef18a4bb726f9e733b48cbba00b54e4dbf1cb432"
+content-hash = "4830a8e8fee6cc2662356c6e1723b081105c40e24a85d018d39bb3c28906a576"
