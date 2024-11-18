@@ -1796,12 +1796,12 @@ requests-toolbelt = ">=1.0.0,<2.0.0"
 
 [[package]]
 name = "llama-cpp-python"
-version = "0.3.1"
+version = "0.3.2"
 description = "Python bindings for the llama.cpp library"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "llama_cpp_python-0.3.1.tar.gz", hash = "sha256:75ec8374960b6353c254e55a48e7c7783abf6bcb9178ba0f655490738e5a9004"},
+    {file = "llama_cpp_python-0.3.2.tar.gz", hash = "sha256:8fbf246a55a999f45015ed0d48f91b4ae04ae959827fac1cd6ac6ec65aed2e2f"},
 ]
 
 [package.dependencies]
