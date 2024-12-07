@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """Command-line tool to generate git commit messages from git diff output."""
 
+from typing import Annotated
+
 import typer
 from rich import print
-from typing_extensions import Annotated
 
 from . import __version__
 from .suggestion import generate_commit_message_from_diff

@@ -188,7 +188,7 @@ def test_create_llm_instance_with_openai(mocker: MockerFixture) -> None:
         temperature=temperature,
         top_p=top_p,
         seed=seed,
-        max_tokens=max_tokens,
+        max_completion_tokens=max_tokens,
         timeout=timeout,
         max_retries=max_retries,
     )

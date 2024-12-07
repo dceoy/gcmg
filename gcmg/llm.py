@@ -177,7 +177,9 @@ def create_llm_instance(
             temperature=temperature,
             top_p=top_p,
             seed=seed,
-            max_tokens=_limit_max_tokens(max_tokens=max_tokens, model_name=m),
+            max_completion_tokens=_limit_max_tokens(
+                max_tokens=max_tokens, model_name=m
+            ),
             timeout=timeout,
             max_retries=max_retries,
         )

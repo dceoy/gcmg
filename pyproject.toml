@@ -149,6 +149,9 @@ max-locals = 30
   "SLF001",   # private-member-access
 ]
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.pyright]
 typeCheckingMode = "strict"
 exclude = ["build"]
