@@ -40,7 +40,6 @@ jobs:
     uses: ./.github/workflows/test.yml
     with:
       python-version: 3.x
-      node-version: latest
       bats-version: latest
     secrets:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}

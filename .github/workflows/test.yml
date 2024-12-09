@@ -8,11 +8,6 @@ on:
         type: string
         description: Python version to use
         default: 3.x
-      node-version:
-        required: false
-        type: string
-        description: Node.js version to use
-        default: latest
       bats-version:
         required: false
         type: string
@@ -29,11 +24,6 @@ on:
         type: string
         description: Python version to use
         default: 3.x
-      node-version:
-        required: false
-        type: string
-        description: Node.js version to use
-        default: latest
       bats-version:
         required: false
         type: string
@@ -73,15 +63,10 @@ jobs:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bats and bats libs
+        uses: bats-core/bats-action@3.0.0
         with:
-          node-version: ${{ inputs.node-version || 'latest' }}
-      - name: Install Bats
-        env:
-          BATS_VERSION: ${{ inputs.bats-version || 'latest' }}
-        run: |
-          npm install -g "bats@${BATS_VERSION}"
+          bats-version: ${{ inputs.bats-version || 'latest' }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
