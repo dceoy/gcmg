@@ -1703,13 +1703,13 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.25"
+version = "0.3.27"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_core-0.3.25-py3-none-any.whl", hash = "sha256:e10581c6c74ba16bdc6fdf16b00cced2aa447cc4024ed19746a1232918edde38"},
-    {file = "langchain_core-0.3.25.tar.gz", hash = "sha256:fdb8df41e5cdd928c0c2551ebbde1cea770ee3c64598395367ad77ddf9acbae7"},
+    {file = "langchain_core-0.3.27-py3-none-any.whl", hash = "sha256:5db42cd73f4f2d5d2550403a4c8b7dec2cd56f1501fe207d009b5b9632a5ca02"},
+    {file = "langchain_core-0.3.27.tar.gz", hash = "sha256:3d71835c4c630db03a19757565046029e89ee96a4b06788892599d49bb3fc58a"},
 ]
 
 [package.dependencies]
@@ -1743,18 +1743,18 @@ pydantic = ">=2,<3"
 
 [[package]]
 name = "langchain-groq"
-version = "0.2.1"
+version = "0.2.2"
 description = "An integration package connecting Groq and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_groq-0.2.1-py3-none-any.whl", hash = "sha256:98d282fd9d7d99b0f55de0a1daea2d5d350ef697e3cb5e97de06aeba4eca8679"},
-    {file = "langchain_groq-0.2.1.tar.gz", hash = "sha256:a59c81d1a15dc97abf4fdb4c2589f98109313eda147e6b378829222d4d929792"},
+    {file = "langchain_groq-0.2.2-py3-none-any.whl", hash = "sha256:227c9db26861894d2e310cb20190f35f3713765558976e929a48714a32431eef"},
+    {file = "langchain_groq-0.2.2.tar.gz", hash = "sha256:eefc938255aff869789d90785279b5b990ef08e1bc81150133d9a788285111c6"},
 ]
 
 [package.dependencies]
 groq = ">=0.4.1,<1"
-langchain-core = ">=0.3.15,<0.4.0"
+langchain-core = ">=0.3.27,<0.4.0"
 
 [[package]]
 name = "langchain-openai"
@@ -3471,4 +3471,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "43767ede67350dc56c7d46ca0cb3fc46bb0d32c5c61ad1506bdf6fe16bab5969"
+content-hash = "df47de548b116f980dba9245e9055d46e437e5a1b052d2425e9422823247f094"
