@@ -1655,18 +1655,18 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-aws"
-version = "0.2.9"
+version = "0.2.10"
 description = "An integration package connecting AWS and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_aws-0.2.9-py3-none-any.whl", hash = "sha256:e6b70017e731d44c3c24c90025b7b199e524c042ae8f8be7094d8bd34ae3adb3"},
-    {file = "langchain_aws-0.2.9.tar.gz", hash = "sha256:bcc1d4c62addf4ee6cca4e441c63269003e1485069193991e27cae5579bc0353"},
+    {file = "langchain_aws-0.2.10-py3-none-any.whl", hash = "sha256:37e4a8d5d1a7d2f493c62ba181e5eb0eb36f4b235dc239b070507dec5b042eed"},
+    {file = "langchain_aws-0.2.10.tar.gz", hash = "sha256:af733cb328e795a3b7189221b4aab694743176c00487749ff885d6297f9860a4"},
 ]
 
 [package.dependencies]
 boto3 = ">=1.35.74"
-langchain-core = ">=0.3.15,<0.4"
+langchain-core = ">=0.3.27,<0.4.0"
 numpy = [
     {version = ">=1,<2", markers = "python_version < \"3.12\""},
     {version = ">=1.26.0,<3", markers = "python_version >= \"3.12\""},
@@ -3471,4 +3471,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "2256dd2389035fc9427ba94eb18cb64d4340914d68237fdaf50636ed6f908aee"
+content-hash = "3903fdce835defc2f769b69630550e1942c1bf2995ad789b12938eba7ec18465"
