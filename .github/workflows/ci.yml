@@ -31,7 +31,7 @@ jobs:
     uses: dceoy/gh-actions-for-devops/.github/workflows/python-package-lint-and-scan.yml@main
     with:
       package-path: .
-      python-version: 3.x
+      python-version: 3.12
   python-test:
     if: >
       github.event_name == 'push'
@@ -39,7 +39,7 @@ jobs:
       || (github.event_name == 'workflow_dispatch' && inputs.workflow == 'lint-and-test')
     uses: ./.github/workflows/test.yml
     with:
-      python-version: 3.x
+      python-version: 3.12
       bats-version: latest
     secrets:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -104,7 +104,7 @@ jobs:
     with:
       package-path: .
       create-releases: ${{ github.event_name == 'workflow_dispatch' && inputs.workflow == 'release' }}
-      python-version: 3.x
+      python-version: 3.12
     secrets:
       PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
