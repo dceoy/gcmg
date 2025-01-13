@@ -147,7 +147,7 @@ def test__generate_and_print_commit_messages_with_empty_llm_output(
     mock_llm_chain.__or__.return_value = mock_llm_chain
     mock_llm_chain.invoke.return_value = ""
 
-    with pytest.raises(RuntimeError, match="LLM output is empty."):
+    with pytest.raises(RuntimeError, match=r"LLM output is empty."):
         _generate_and_print_commit_messages(
             git_diff_text="dummy diff",
             llm=mock_llm_chain,

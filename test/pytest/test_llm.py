@@ -198,7 +198,7 @@ def test_create_llm_instance_no_model_specified(mocker: MockerFixture) -> None:
     mocker.patch("gcmg.llm.override_env_vars")
     mocker.patch.dict(os.environ, {}, clear=True)
     mocker.patch("gcmg.llm.has_aws_credentials", return_value=False)
-    with pytest.raises(RuntimeError, match="The model cannot be determined."):
+    with pytest.raises(RuntimeError, match=r"The model cannot be determined."):
         create_llm_instance()
 
 
