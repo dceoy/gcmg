@@ -3,10 +3,13 @@
 
 import logging
 import os
+from typing import TYPE_CHECKING
 
 import boto3
 from botocore.exceptions import NoCredentialsError
-from mypy_boto3_sts.client import STSClient
+
+if TYPE_CHECKING:
+    from mypy_boto3_sts.client import STSClient
 
 
 def configure_logging(

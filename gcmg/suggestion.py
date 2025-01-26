@@ -4,8 +4,8 @@
 import fileinput
 import logging
 import subprocess  # noqa: S404
+from typing import TYPE_CHECKING
 
-from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
 from langchain_aws import ChatBedrockConverse
@@ -16,6 +16,9 @@ from langchain_openai import ChatOpenAI
 from rich import print
 
 from .llm import create_llm_instance
+
+if TYPE_CHECKING:
+    from langchain.chains import LLMChain
 
 _GENERATION_TEMPLATE = """\
 Instruction:
@@ -150,7 +153,8 @@ def _generate_and_print_commit_messages(
         if llm_output:
             print(llm_output)
         else:
-            raise RuntimeError("LLM output is empty.")
+            error_message = "LLM output is empty."
+            raise RuntimeError(error_message)
 
 
 def _read_git_diff_txt(path: str | None = None, git: str = "git") -> str | None:

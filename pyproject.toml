@@ -88,7 +88,7 @@ select = [
   "DTZ",    # flake8-datetimez (DTZ)
   "T10",    # flake8-debugger (T10)
   "DJ",     # flake8-django (DJ)
-  # "EM",     # flake8-errmsg (EM)
+  "EM",     # flake8-errmsg (EM)
   # "EXE",    # flake8-executable (EXE)
   # "FA",     # flake8-future-annotations (FA)
   "ISC",    # flake8-implicit-str-concat (ISC)
@@ -97,7 +97,7 @@ select = [
   "G",      # flake8-logging-format (G)
   "INP",    # flake8-no-pep420 (INP)
   "PIE",    # flake8-pie (PIE)
-  # "T20",    # flake8-print (T20)
+  "T20",    # flake8-print (T20)
   "PYI",    # flake8-pyi (PYI)
   "PT",     # flake8-pytest-style (PT)
   "Q",      # flake8-quotes (Q)
@@ -106,7 +106,7 @@ select = [
   "SLF",    # flake8-self (SLF)
   "SLOT",   # flake8-slots (SLOT)
   "TID",    # flake8-tidy-imports (TID)
-  # "TCH",    # flake8-type-checking (TCH)
+  "TCH",    # flake8-type-checking (TCH)
   "INT",    # flake8-gettext (INT)
   "PTH",    # flake8-use-pathlib (PTH)
   "TD",     # flake8-todos (TD)
@@ -182,6 +182,7 @@ omit = ["tests/*"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 100
+exclude_lines = ["if TYPE_CHECKING:"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

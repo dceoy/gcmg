@@ -184,7 +184,8 @@ def create_llm_instance(
             max_retries=max_retries,
         )
     else:
-        raise RuntimeError("The model cannot be determined.")
+        error_message = "The model cannot be determined."
+        raise RuntimeError(error_message)
 
 
 def _limit_max_tokens(max_tokens: int, model_name: str) -> int:
@@ -236,4 +237,4 @@ def _read_llm_file(
 @llama_log_callback
 def _llama_log_callback(level: int, text: bytes, user_data: ctypes.c_void_p) -> None:  # noqa: ARG001
     if logging.root.level < logging.WARNING:
-        print(text.decode("utf-8"), end="", flush=True, file=sys.stderr)
+        print(text.decode("utf-8"), end="", flush=True, file=sys.stderr)  # noqa: T201
