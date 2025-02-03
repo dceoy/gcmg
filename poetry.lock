@@ -1653,13 +1653,13 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-aws"
-version = "0.2.11"
+version = "0.2.12"
 description = "An integration package connecting AWS and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_aws-0.2.11-py3-none-any.whl", hash = "sha256:8351f5ea49da16ad67fd54801629d67ff71a204d0c6d80bd056fa451bcb43824"},
-    {file = "langchain_aws-0.2.11.tar.gz", hash = "sha256:1ceb58e44d01bc4e90e05e340ae7f90331c7dda012bcf8e4a89d35d864994835"},
+    {file = "langchain_aws-0.2.12-py3-none-any.whl", hash = "sha256:1ed3713aa9cd68016b29af1f6eba74c705d2d3e4b6b1fd92cd359cb69eb06851"},
+    {file = "langchain_aws-0.2.12.tar.gz", hash = "sha256:98122987923b5f7933d62611efa632465de1ba335736e67ff09a6f9f18f285f8"},
 ]
 
 [package.dependencies]
@@ -3470,4 +3470,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "770c0f36d6a9e2395c0c360918c727a0d2c1833525b675aefeb721b870ddeae0"
+content-hash = "d1419867cd05ca690714be027d413a9db2f738e724eeb040d77c2e41addff589"
