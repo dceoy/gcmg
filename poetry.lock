@@ -1627,22 +1627,22 @@ files = [
 
 [[package]]
 name = "langchain"
-version = "0.3.17"
+version = "0.3.18"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain-0.3.17-py3-none-any.whl", hash = "sha256:4d6d3cf454cc261a5017fd1fa5014cffcc7aeaccd0ec0530fc10c5f71e6e97a0"},
-    {file = "langchain-0.3.17.tar.gz", hash = "sha256:cef56f0a7c8369f35f1fa2690ecf0caa4504a36a5383de0eb29b8a5e26f625a0"},
+    {file = "langchain-0.3.18-py3-none-any.whl", hash = "sha256:1a6e629f02a25962aa5b16932e8f073248104a66804ed5af1f78618ad7c1d38d"},
+    {file = "langchain-0.3.18.tar.gz", hash = "sha256:311ac227a995545ff7c3f74c7767930c5349edef0b39f19d3105b86d39316b69"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.8.3,<4.0.0"
-langchain-core = ">=0.3.33,<0.4.0"
-langchain-text-splitters = ">=0.3.3,<0.4.0"
+langchain-core = ">=0.3.34,<1.0.0"
+langchain-text-splitters = ">=0.3.6,<1.0.0"
 langsmith = ">=0.1.17,<0.4"
 numpy = [
-    {version = ">=1.22.4,<2", markers = "python_version < \"3.12\""},
+    {version = ">=1.26.4,<2", markers = "python_version < \"3.12\""},
     {version = ">=1.26.2,<3", markers = "python_version >= \"3.12\""},
 ]
 pydantic = ">=2.7.4,<3.0.0"
@@ -1650,6 +1650,22 @@ PyYAML = ">=5.3"
 requests = ">=2,<3"
 SQLAlchemy = ">=1.4,<3"
 tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
+
+[package.extras]
+anthropic = ["langchain-anthropic"]
+aws = ["langchain-aws"]
+cohere = ["langchain-cohere"]
+community = ["langchain-community"]
+deepseek = ["langchain-deepseek"]
+fireworks = ["langchain-fireworks"]
+google-genai = ["langchain-google-genai"]
+google-vertexai = ["langchain-google-vertexai"]
+groq = ["langchain-groq"]
+huggingface = ["langchain-huggingface"]
+mistralai = ["langchain-mistralai"]
+ollama = ["langchain-ollama"]
+openai = ["langchain-openai"]
+together = ["langchain-together"]
 
 [[package]]
 name = "langchain-aws"
@@ -1772,17 +1788,17 @@ tiktoken = ">=0.7,<1"
 
 [[package]]
 name = "langchain-text-splitters"
-version = "0.3.3"
+version = "0.3.6"
 description = "LangChain text splitting utilities"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_text_splitters-0.3.3-py3-none-any.whl", hash = "sha256:c2f8650457685072971edc8c52c9f8826496b3307f28004a7fd09eb32d4d819f"},
-    {file = "langchain_text_splitters-0.3.3.tar.gz", hash = "sha256:c596958dcab15fdfe0627fd36ce9d588d0a7e35593af70cd10d0a4a06d69b3ee"},
+    {file = "langchain_text_splitters-0.3.6-py3-none-any.whl", hash = "sha256:e5d7b850f6c14259ea930be4a964a65fa95d9df7e1dbdd8bad8416db72292f4e"},
+    {file = "langchain_text_splitters-0.3.6.tar.gz", hash = "sha256:c537972f4b7c07451df431353a538019ad9dadff7a1073ea363946cea97e1bee"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.3.25,<0.4.0"
+langchain-core = ">=0.3.34,<1.0.0"
 
 [[package]]
 name = "langsmith"
@@ -3470,4 +3486,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "9dc696ca57c928bed6bbabf31a67ecf2360b7e4157e6f04dc957cf9be78b5c9e"
+content-hash = "88d632d9415bf1dd49cbe2585c13da0c0443ca1abe90ec27ea06c4022c2f0b7a"
