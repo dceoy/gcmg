@@ -1717,13 +1717,13 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.37"
+version = "0.3.39"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_core-0.3.37-py3-none-any.whl", hash = "sha256:8202fd6506ce139a3a1b1c4c3006216b1c7fffa40bdd1779f7d2c67f75eb5f79"},
-    {file = "langchain_core-0.3.37.tar.gz", hash = "sha256:cda8786e616caa2f68f7cc9e811b9b50e3b63fb2094333318b348e5961a7ea01"},
+    {file = "langchain_core-0.3.39-py3-none-any.whl", hash = "sha256:00f35e15e5f21d77320b3f8b816a1bf5de0b40b7809cd625dc3813b850a87fb2"},
+    {file = "langchain_core-0.3.39.tar.gz", hash = "sha256:97d49eccb1dea057b2efadae178bcc5e6472caa69c171fa4508fa6fb45f44c0e"},
 ]
 
 [package.dependencies]
@@ -1772,17 +1772,17 @@ langchain-core = ">=0.3.33,<0.4.0"
 
 [[package]]
 name = "langchain-openai"
-version = "0.3.6"
+version = "0.3.7"
 description = "An integration package connecting OpenAI and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_openai-0.3.6-py3-none-any.whl", hash = "sha256:05f0869f6cc963e2ec9e2e54ea1038d9c2af784c67f0e217040dfc918b31649a"},
-    {file = "langchain_openai-0.3.6.tar.gz", hash = "sha256:7daf92e1cd98865ab5213ec5bec2cbd6c28f011e250714978b3a99c7e4fc88ce"},
+    {file = "langchain_openai-0.3.7-py3-none-any.whl", hash = "sha256:0aefc7bdf8e7398d41e09c4313cace816df6438f2aa93d34f79523487310f0da"},
+    {file = "langchain_openai-0.3.7.tar.gz", hash = "sha256:b8b51a3aaa1cc3bda060651ea41145f7728219e8a7150b5404fb1e8446de9cef"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.3.35,<1.0.0"
+langchain-core = ">=0.3.39,<1.0.0"
 openai = ">=1.58.1,<2.0.0"
 tiktoken = ">=0.7,<1"
 
@@ -3486,4 +3486,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c0bd26ebdc87ee295b228a190e05e2a865eeaa67503df415237d788ab7590c35"
+content-hash = "dd2a698348881393a345dd58c3a82832dde926cf3d10db63b06bdeba6d748daf"
