@@ -1175,7 +1175,7 @@ description = "Lightweight in-process concurrent programming"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
-markers = "python_version <= \"3.12\" and (platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\")"
+markers = "python_version < \"3.13\" and (platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\")"
 files = [
     {file = "greenlet-3.1.1-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:0bbae94a29c9e5c7e4a2b7f0aae5c17e8e90acbfd3bf6270eeba60c39fce3563"},
     {file = "greenlet-3.1.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0fde093fb93f35ca72a556cf72c92ea3ebfda3d79fc35bb19fbe685853869a83"},
@@ -1603,30 +1603,24 @@ files = [
 
 [[package]]
 name = "langchain"
-version = "0.3.19"
+version = "0.3.20"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "langchain-0.3.19-py3-none-any.whl", hash = "sha256:1e16d97db9106640b7de4c69f8f5ed22eeda56b45b9241279e83f111640eff16"},
-    {file = "langchain-0.3.19.tar.gz", hash = "sha256:b96f8a445f01d15d522129ffe77cc89c8468dbd65830d153a676de8f6b899e7b"},
+    {file = "langchain-0.3.20-py3-none-any.whl", hash = "sha256:273287f8e61ffdf7e811cf8799e6a71e9381325b8625fd6618900faba79cfdd0"},
+    {file = "langchain-0.3.20.tar.gz", hash = "sha256:edcc3241703e1f6557ef5a5c35cd56f9ccc25ff12e38b4829c66d94971737a93"},
 ]
 
 [package.dependencies]
-aiohttp = ">=3.8.3,<4.0.0"
-langchain-core = ">=0.3.35,<1.0.0"
+langchain-core = ">=0.3.41,<1.0.0"
 langchain-text-splitters = ">=0.3.6,<1.0.0"
 langsmith = ">=0.1.17,<0.4"
-numpy = [
-    {version = ">=1.26.4,<2", markers = "python_version < \"3.12\""},
-    {version = ">=1.26.2,<3", markers = "python_version >= \"3.12\""},
-]
 pydantic = ">=2.7.4,<3.0.0"
 PyYAML = ">=5.3"
 requests = ">=2,<3"
 SQLAlchemy = ">=1.4,<3"
-tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [package.extras]
 anthropic = ["langchain-anthropic"]
@@ -1697,14 +1691,14 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.39"
+version = "0.3.41"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "langchain_core-0.3.39-py3-none-any.whl", hash = "sha256:00f35e15e5f21d77320b3f8b816a1bf5de0b40b7809cd625dc3813b850a87fb2"},
-    {file = "langchain_core-0.3.39.tar.gz", hash = "sha256:97d49eccb1dea057b2efadae178bcc5e6472caa69c171fa4508fa6fb45f44c0e"},
+    {file = "langchain_core-0.3.41-py3-none-any.whl", hash = "sha256:1a27cca5333bae7597de4004fb634b5f3e71667a3da6493b94ce83bcf15a23bd"},
+    {file = "langchain_core-0.3.41.tar.gz", hash = "sha256:d3ee9f3616ebbe7943470ade23d4a04e1729b1512c0ec55a4a07bd2ac64dedb4"},
 ]
 
 [package.dependencies]
@@ -3503,4 +3497,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "05e27d07aedda97215fdf0032ece3a6fb2f8ae664775b9381966d19bac550e90"
+content-hash = "f3a4a2b6fe7d39cdb30d9d4003be81a68c02c58d89885a598f491c44aca54b7e"
