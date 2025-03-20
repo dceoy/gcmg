@@ -1732,19 +1732,19 @@ pydantic = ">=2,<3"
 
 [[package]]
 name = "langchain-groq"
-version = "0.2.5"
+version = "0.3.0"
 description = "An integration package connecting Groq and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "langchain_groq-0.2.5-py3-none-any.whl", hash = "sha256:1d1635a8274228654c440a9115a32d51c4d99944f36ac3180a7c27076694036c"},
-    {file = "langchain_groq-0.2.5.tar.gz", hash = "sha256:7f194c77bffbbaf3cf4f038d46927043e4364cca97f406a939a69be3b34ce595"},
+    {file = "langchain_groq-0.3.0-py3-none-any.whl", hash = "sha256:ed332e731e1013e0834641bbadd27526f61a6c5d2f2e48cf14d1ee6929afc2ce"},
+    {file = "langchain_groq-0.3.0.tar.gz", hash = "sha256:9da0ac12a59e10a0005da5b71a1afc67d6b64061593321f8020cd26dfda5f172"},
 ]
 
 [package.dependencies]
 groq = ">=0.4.1,<1"
-langchain-core = ">=0.3.42,<1.0.0"
+langchain-core = ">=0.3.45,<1.0.0"
 
 [[package]]
 name = "langchain-openai"
@@ -3496,4 +3496,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "1763c17caffbcc7137c08358efda1a57d8df4246c7575f8c4f9a5cfa3014de36"
+content-hash = "5ca9c3ac74ba01b8cf4019a048db315752be87c099b03482fe3363c2a495877c"
