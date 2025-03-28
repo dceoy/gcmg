@@ -1714,20 +1714,20 @@ typing-extensions = ">=4.7"
 
 [[package]]
 name = "langchain-google-genai"
-version = "2.1.1"
+version = "2.1.2"
 description = "An integration package connecting Google's genai package and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "langchain_google_genai-2.1.1-py3-none-any.whl", hash = "sha256:946cdd1bc008112a0aea8066274fc1e273a3b8b3b4325badec2dbd4b467eadfc"},
-    {file = "langchain_google_genai-2.1.1.tar.gz", hash = "sha256:da87977d1a72428b568ff3f65033af023a99edb244dddeb0a7842b40559355f6"},
+    {file = "langchain_google_genai-2.1.2-py3-none-any.whl", hash = "sha256:eb9c95d551ecc0216e5baef2f2e6ae1b60897e618f273356d31b680022a1a755"},
+    {file = "langchain_google_genai-2.1.2.tar.gz", hash = "sha256:f605501b498288d32914f6f8c0b7c9cfa67432757f596dcb2dbbd8042e892963"},
 ]
 
 [package.dependencies]
 filetype = ">=1.2.0,<2.0.0"
 google-ai-generativelanguage = ">=0.6.16,<0.7.0"
-langchain-core = ">=0.3.47,<0.4.0"
+langchain-core = ">=0.3.49,<0.4.0"
 pydantic = ">=2,<3"
 
 [[package]]
@@ -3497,4 +3497,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "6f42b4ccba7c42ecd4844a5bc302edd521a6c1b902ce62fbdf60db4475ac9465"
+content-hash = "3d954cf2d3189cbc3155385f7dd281b4fed073116f41c52e2d2dbed904af9fd5"
